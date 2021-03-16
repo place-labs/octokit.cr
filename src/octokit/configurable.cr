@@ -1,4 +1,4 @@
-require "logger"
+# require "logger"
 require "./default"
 
 module Octokit
@@ -144,17 +144,17 @@ module Octokit
     end
 
     # Logger. Must be compatible with Crystal logger.
-    @logger : Logger = Default.logger
+    # @logger : Logger = Default.logger
 
     # Get the configured logger instance.
-    def logger
-      @logger
-    end
+    # def logger
+    #   @logger
+    # end
 
     # Set a configured logger instance.
-    def logger=(val)
-      @logger = val
-    end
+    # def logger=(val)
+    #   @logger = val
+    # end
 
     @proxy : String? = nil
 
