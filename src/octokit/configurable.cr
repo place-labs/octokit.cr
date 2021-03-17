@@ -58,7 +58,33 @@ module Octokit
     # The maximum results returned per page for paginated endpoints.
     property per_page : Int32?
 
+
     # The proxy to use when connecting.
+
+    # Logger. Must be compatible with Crystal logger.
+    # @logger : Logger = Default.logger
+
+    # Get the configured logger instance.
+    # def logger
+    #   @logger
+    # end
+
+    # Set a configured logger instance.
+    # def logger=(val)
+    #   @logger = val
+    # end
+
+    @proxy : String? = nil
+
+    # Get the proxy to use when connecting.
+    # **Note:** Crystal's `HTTP::Client` and by extension `Halite` do not yet
+    # support proxy's. Therefore this option does nothing for now.
+    def proxy
+      @proxy
+    end
+
+    # Set the proxy to use when connecting.
+
     # **Note:** Crystal's `HTTP::Client` and by extension `Halite` do not yet
     # support proxy's.
     # Therefore this option does nothing for now.
