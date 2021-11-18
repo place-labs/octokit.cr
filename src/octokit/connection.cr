@@ -230,6 +230,27 @@ module Octokit
         records
       end
 
+      # Get the first record
+      def first
+        @records[0]
+      end
+
+      # Get the first record, returning `nil` if
+      # the index contains no records.
+      def first?
+        @records[0]?
+      end
+
+      # Get the last record
+      def last
+        @records[-1]
+      end
+
+      # Get a range of records
+      def range(first, last)
+        @records[first..last]
+      end
+
       alias_method :fetch_all, :all
 
       # Fetch a specific page.
