@@ -15,16 +15,22 @@ describe Octokit do
   it "gets the branches of a given repo" do
     branches = client.branches("placeos/staff-api")
     branches.fetch_all.should_not be_empty
-    branches.fetch_all.each do |branch|
-      puts branch.name
-    end
-    puts branches.first.name
-    puts branches.last.name
-    puts branches.range(0, 4)
+    # puts branches.first.name
+    # puts branches.last.name
+    # puts branches.range(0, 4)
   end
 
   it "gets the tags of a given repo" do
     tags = client.tags("placeos/staff-api")
     tags.fetch_all.should_not be_empty
+  end
+
+  it "gets the a repo" do
+    repo = client.repository("placeos/staff-api")
+    repo.not_nil!
+  end
+
+  it "checks a repo exsists" do
+    client.repository?("placeos/staff-api").should be_true
   end
 end
