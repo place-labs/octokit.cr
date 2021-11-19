@@ -2,8 +2,8 @@ module Octokit
   module Models
     class Branch
       include JSON::Serializable
-      getter name : String?
-      getter commit : BranchCommit?
+      getter name : String
+      getter commit : BranchCommit
       getter protected : Bool?
 
       def initialize(@name, @commit, @protected)
@@ -12,8 +12,8 @@ module Octokit
 
     struct BranchCommit
       include JSON::Serializable
-      getter sha : String?
-      getter url : String?
+      getter sha : String
+      getter url : String
 
       def initialize(@sha, @url)
       end
