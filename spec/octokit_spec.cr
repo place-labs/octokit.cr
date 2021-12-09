@@ -28,11 +28,11 @@ describe Octokit do
   end
 
   it "download the first asset from the latest release" do
-    client.latest_release_asset("tassja/octokit.cr")
+    client.latest_release_asset("tassja/octokit.cr", "./")
   end
 
   it "download the first asset from a specified tag" do
-    client.release_asset("tassja/octokit.cr", "v0.1.1")
+    client.release_asset("tassja/octokit.cr", "v0.1.1", "aa")
   end
 
   it "checks a repo exsists" do

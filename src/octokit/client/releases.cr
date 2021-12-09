@@ -106,19 +106,19 @@ module Octokit
       # Download the first asset from the latest release, if it exists
       #
       #
-      def latest_release_asset(repo)
+      def latest_release_asset(repo, path)
         release = self.releases(repo).fetch_all.first?
         raise Exception.new("no release found") if release.nil?
-        download_asset(repo, release)
+        download_asset(repo, release, path)
       end
 
-      def release_asset(repo, tag)
+      def release_asset(repo, tag, path)
         release = self.release_for_tag(repo, tag)
         raise Exception.new("no release found") if release.nil?
-        download_asset(repo, release)
+        download_asset(repo, release, path)
       end
 
-      def download_asset(repo, release)
+      def download_asset(repo, release, dest_path)
         assets = release.assets
         raise Exception.new("no assets found") if assets.nil?
         asset_id = assets.first.id
@@ -128,14 +128,16 @@ module Octokit
         raise Exception.new("no asset_url found") if asset_url.nil?
         file_name = asset_url.split("/").last
 
+        file_path = Path.new(dest_path, file_name)
+
         begin
           HTTP::Client.get(asset_url) do |redirect_response|
             raise HTTP::Server::ClientError.new("status_code for #{asset_url} was #{redirect_response.status_code}") unless (redirect_response.success? || redirect_response.status_code == 302)
             HTTP::Client.get(redirect_response.headers["location"]) do |response|
-              File.write(file_name, response.body_io)
+              File.write(file_path, response.body_io)
             end
           end
-          File.new(file_name)
+          File.new(file_path)
         rescue ex : File::Error | HTTP::Server::ClientError
           Log.error(exception: ex) { "Could not download file at URL: #{ex.message}" }
         end
