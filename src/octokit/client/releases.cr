@@ -103,6 +103,35 @@ module Octokit
         ReleaseAsset.from_json(res)
       end
 
+      # Download the first release asset, if it exists
+      #
+      #
+      def first_release_asset(repo)
+        release = self.releases(repo).fetch_all.first?
+        raise Exception.new("no release found") if release.nil?
+        assets = release.assets
+        raise Exception.new("no assets found") if assets.nil?
+        asset_id = assets.first.id
+
+        res = get "#{Repository.path(repo)}/releases/assets/#{asset_id}"
+        asset = ReleaseAsset.from_json(res)
+        asset_url = asset.browser_download_url
+        raise Exception.new("no asset_url found") if asset_url.nil?
+        file_name = asset_url.split("/").last
+
+        begin
+          HTTP::Client.get(asset_url) do |redirect_response|
+            raise HTTP::Server::ClientError.new("status_code for #{asset_url} was #{redirect_response.status_code}") unless (redirect_response.success? || redirect_response.status_code == 302)
+            HTTP::Client.get(redirect_response.headers["location"]) do |response|
+              File.write(file_name, response.body_io)
+            end
+          end
+          File.new(file_name)
+        rescue ex : File::Error | HTTP::Server::ClientError
+          Log.error(exception: ex) { "Could not download file at URL: #{ex.message}" }
+        end
+      end
+
       # Update a release asset
       #
       # **See Also:**

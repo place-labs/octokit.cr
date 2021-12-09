@@ -30,6 +30,10 @@ describe Octokit do
     repo.not_nil!
   end
 
+  it "download an asset" do
+    client.first_release_asset("tassja/octokit.cr")
+  end
+
   it "checks a repo exsists" do
     client.repository?("placeos/staff-api").should be_true
   end
