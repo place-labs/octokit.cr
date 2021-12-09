@@ -15,9 +15,6 @@ describe Octokit do
   it "gets the branches of a given repo" do
     branches = client.branches("placeos/staff-api")
     branches.fetch_all.should_not be_empty
-    # puts branches.first.name
-    # puts branches.last.name
-    # puts branches.range(0, 4)
   end
 
   it "gets the tags of a given repo" do
@@ -30,8 +27,12 @@ describe Octokit do
     repo.not_nil!
   end
 
-  it "download an asset" do
-    client.first_release_asset("tassja/octokit.cr")
+  it "download the first asset from the latest release" do
+    client.latest_release_asset("tassja/octokit.cr")
+  end
+
+  it "download the first asset from a specified tag" do
+    client.release_asset("tassja/octokit.cr", "v0.1.1")
   end
 
   it "checks a repo exsists" do

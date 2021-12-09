@@ -103,16 +103,25 @@ module Octokit
         ReleaseAsset.from_json(res)
       end
 
-      # Download the first release asset, if it exists
+      # Download the first asset from the latest release, if it exists
       #
       #
-      def first_release_asset(repo)
+      def latest_release_asset(repo)
         release = self.releases(repo).fetch_all.first?
         raise Exception.new("no release found") if release.nil?
+        download_asset(repo, release)
+      end
+
+      def release_asset(repo, tag)
+        release = self.release_for_tag(repo, tag)
+        raise Exception.new("no release found") if release.nil?
+        download_asset(repo, release)
+      end
+
+      def download_asset(repo, release)
         assets = release.assets
         raise Exception.new("no assets found") if assets.nil?
         asset_id = assets.first.id
-
         res = get "#{Repository.path(repo)}/releases/assets/#{asset_id}"
         asset = ReleaseAsset.from_json(res)
         asset_url = asset.browser_download_url
