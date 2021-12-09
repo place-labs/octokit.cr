@@ -38,8 +38,9 @@ module Octokit
       getter download_count : Int32?
       getter created_at : Time?
       getter updated_at : Time?
+      getter browser_download_url : String?
 
-      def initialize(@id, @url, @name, @label, @state, @content_type, @size, @download_count, @created_at, @updated_at)
+      def initialize(@id, @url, @name, @label, @state, @content_type, @size, @download_count, @created_at, @updated_at, @browser_download_url)
       end
     end
 
